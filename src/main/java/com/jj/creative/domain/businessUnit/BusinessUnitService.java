@@ -1,26 +1,46 @@
 package com.jj.creative.domain.businessUnit;
 
-import java.util.List;
+import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import com.jj.creative.domain.businessUnit.dto.BusinessUnitDto;
+import com.jj.creative.domain.businessUnit.dto.BusinessUnitMapper;
+import com.jj.creative.utils.pagination.ResponsePagination;
 
 @Service
 public class BusinessUnitService {
-    @Autowired
-    BusinessUnitRepository businessUnitRepository;
+    private final BusinessUnitRepository businessUnitRepository;
 
-    public List<BusinessUnit> findAll(String name) {
-        System.out.println("entrou aqui!!");
-        if (!name.isEmpty()) {
-            return businessUnitRepository.findByNameContainsIgnoreCase(name);
+    private final BusinessUnitMapper businessUnitMapper;
+
+    BusinessUnitService(BusinessUnitRepository businessUnitRepository, BusinessUnitMapper businessUnitMapper) {
+        this.businessUnitRepository = businessUnitRepository;
+        this.businessUnitMapper = businessUnitMapper;
+    }
+
+    public ResponsePagination<BusinessUnit> findAll(String name) {
+        Pageable pageable = PageRequest.of(0, 10);
+
+        if (name != null && !name.isEmpty()) {
+            return new ResponsePagination<>(businessUnitRepository.findByNameContainsIgnoreCase(pageable, name));
         }
 
-        return businessUnitRepository.findAll();
+        return new ResponsePagination<>(businessUnitRepository.findAll(pageable));
     }
 
-    public BusinessUnit create(BusinessUnit businessUnit) {
-        return businessUnitRepository.save(businessUnit);
+    public BusinessUnitDto create(BusinessUnit businessUnit) {
+        return businessUnitMapper.toDTO(businessUnitRepository.save(businessUnit));
     }
 
+    public BusinessUnitDto findById(UUID id) {
+        return businessUnitRepository.findById(id).map(businessUnitMapper::toDTO)
+                .orElseThrow(() -> new RuntimeException("Could not find"));
+    }
+
+    public void delete(UUID id) {
+        businessUnitRepository.deleteById(id);
+    }
 }
