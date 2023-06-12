@@ -19,11 +19,12 @@ public class OccupationAreaController {
     @Autowired
     OccupationAreaService occupationAreaService;
 
-    @GetMapping("/{businessUnitLocalId}")
-    public ResponsePagination<OccupationArea> list(@PathVariable UUID businessUnitLocalId,
-            @RequestParam(required = false) String name) {
-        return occupationAreaService.list(businessUnitLocalId, name);
-    }
+    // @GetMapping("/{businessUnitLocalId}")
+    // public ResponsePagination<OccupationArea> list(@PathVariable UUID
+    // businessUnitLocalId,
+    // @RequestParam(required = false) String name) {
+    // return occupationAreaService.list(businessUnitLocalId, name);
+    // }
 
     @PostMapping
     public OccupationArea create(@RequestBody OccupationArea occupationArea) {

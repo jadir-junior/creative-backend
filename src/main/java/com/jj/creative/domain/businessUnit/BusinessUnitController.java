@@ -24,7 +24,7 @@ public class BusinessUnitController {
     BusinessUnitService businessUnitService;
 
     @GetMapping
-    public ResponsePagination<BusinessUnit> findAll(@RequestParam(required = false) String name) {
+    public ResponsePagination<BusinessUnitDto, BusinessUnit> findAll(@RequestParam(required = false) String name) {
         return businessUnitService.findAll(name);
     }
 

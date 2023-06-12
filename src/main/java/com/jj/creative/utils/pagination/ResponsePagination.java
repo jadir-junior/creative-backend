@@ -7,13 +7,13 @@ import org.springframework.data.domain.Page;
 import lombok.Getter;
 
 @Getter
-public class ResponsePagination<T> {
-    private List<T> data;
-    private Pagination<T> pagination;
+public class ResponsePagination<D, E> {
+    private List<D> data;
+    private Pagination<E> pagination;
 
-    public ResponsePagination(Page<T> page) {
-        this.data = page.getContent();
-        this.pagination = new Pagination<>(page);
+    public ResponsePagination(List<D> dto, Page<E> page) {
+        this.data = dto;
+        this.pagination = new Pagination<E>(page);
     }
 
 }

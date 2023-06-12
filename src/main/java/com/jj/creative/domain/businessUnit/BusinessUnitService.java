@@ -1,7 +1,10 @@
 package com.jj.creative.domain.businessUnit;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,14 +24,23 @@ public class BusinessUnitService {
         this.businessUnitMapper = businessUnitMapper;
     }
 
-    public ResponsePagination<BusinessUnit> findAll(String name) {
+    public ResponsePagination<BusinessUnitDto, BusinessUnit> findAll(String name) {
         Pageable pageable = PageRequest.of(0, 10);
 
         if (name != null && !name.isEmpty()) {
-            return new ResponsePagination<>(businessUnitRepository.findByNameContainsIgnoreCase(pageable, name));
+            Page<BusinessUnit> page = businessUnitRepository.findByNameContainsIgnoreCase(pageable, name);
+            List<BusinessUnit> businessUnit = page.getContent();
+            List<BusinessUnitDto> businessUnitDtos = businessUnit.stream().map(businessUnitMapper::toDTO)
+                    .collect(Collectors.toList());
+            return new ResponsePagination<>(businessUnitDtos, page);
         }
 
-        return new ResponsePagination<>(businessUnitRepository.findAll(pageable));
+        Page<BusinessUnit> page = businessUnitRepository.findAll(pageable);
+        List<BusinessUnit> businessUnit = page.getContent();
+        List<BusinessUnitDto> businessUnitDtos = businessUnit.stream().map(businessUnitMapper::toDTO)
+                .collect(Collectors.toList());
+
+        return new ResponsePagination<>(businessUnitDtos, page);
     }
 
     public BusinessUnitDto create(BusinessUnit businessUnit) {

@@ -14,16 +14,18 @@ public class OccupationAreaService {
     @Autowired
     OccupationAreaRepository occupationAreaRepository;
 
-    public ResponsePagination<OccupationArea> list(UUID businessUnitLocalId, String name) {
-        Pageable pageable = PageRequest.of(0, 10);
+    // public ResponsePagination<OccupationArea> list(UUID businessUnitLocalId,
+    // String name) {
+    // Pageable pageable = PageRequest.of(0, 10);
 
-        if (name != null && !name.isEmpty()) {
-            return new ResponsePagination<>(occupationAreaRepository
-                    .findAllByBusinessUnitLocalIdAndNameContainsIgnoreCase(pageable, businessUnitLocalId, name));
-        }
+    // if (name != null && !name.isEmpty()) {
+    // return new ResponsePagination<>(occupationAreaRepository
+    // .findAllByBusinessUnitLocalIdAndNameContainsIgnoreCase(pageable,
+    // businessUnitLocalId, name));
+    // }
 
-        return new ResponsePagination<>(occupationAreaRepository.findAll(pageable));
-    }
+    // return new ResponsePagination<>(occupationAreaRepository.findAll(pageable));
+    // }
 
     public OccupationArea create(OccupationArea occupationArea) {
         return occupationAreaRepository.save(occupationArea);
